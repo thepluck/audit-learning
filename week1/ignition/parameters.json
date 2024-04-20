@@ -1,0 +1,7 @@
+{
+    "ERC20": {
+        "name": "Platinum",
+        "symbol": "PLAT",
+        "decimals": 18
+    }
+}
