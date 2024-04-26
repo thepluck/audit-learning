@@ -9,6 +9,9 @@ interface IERC20 {
         uint256 amount
     );
 
+    error MaxTotalSupplyExceeded(uint256 totalSupply, uint256 maxTotalSupply);
+    error InvalidOwner();
+
     function totalSupply() external view returns (uint256);
 
     function balanceOf(address account) external view returns (uint256);

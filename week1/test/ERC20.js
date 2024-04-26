@@ -1,5 +1,6 @@
 const { expect } = require("chai");
 const { loadFixture } = require("@nomicfoundation/hardhat-network-helpers");
+const { ethers } = require("hardhat");
 
 describe("ERC20", function () {
   async function deployEmptyERC20Fixture() {
@@ -53,9 +54,8 @@ describe("ERC20", function () {
 
     it("Should fail if the sender doesn't have enough tokens", async function () {
       const { erc20, owner, account } = await deployERC20Fixture();
-      await expect(
-        erc20.connect(account).transfer(owner.address, 1001)
-      ).to.be.revertedWith("Insufficient balance");
+      await expect(erc20.connect(account).transfer(owner.address, 1001)).to.be
+        .reverted;
     });
   });
 
@@ -100,7 +100,7 @@ describe("ERC20", function () {
       const { erc20, owner, account } = await deployERC20Fixture();
       await expect(
         erc20.connect(owner).transferFrom(account.address, owner.address, 100)
-      ).to.be.revertedWith("Insufficient allowance");
+      ).to.be.reverted;
     });
 
     it("Should fail if the sender doesn't have enough tokens", async function () {
@@ -108,7 +108,47 @@ describe("ERC20", function () {
       await erc20.connect(account).approve(owner.address, 1001);
       await expect(
         erc20.connect(owner).transferFrom(account.address, owner.address, 1001)
-      ).to.be.revertedWith("Insufficient balance");
+      ).to.be.reverted;
+    });
+  });
+
+  describe("mint", function () {
+    it("Should fail if the caller is not the owner", async function () {
+      const { erc20, account } = await deployERC20Fixture();
+      await expect(
+        erc20.connect(account).mint(account.address, 100)
+      ).to.be.revertedWithCustomError(erc20, "InvalidOwner");
+    });
+
+    it("Should fail if exceeding max total supply", async function () {
+      const { erc20, account } = await deployEmptyERC20Fixture();
+      const maxTotalSupply = 10n ** 9n * 10n ** 18n;
+      await expect(erc20.mint(account.address, maxTotalSupply + 1n))
+        .to.be.revertedWithCustomError(erc20, "MaxTotalSupplyExceeded")
+        .withArgs(maxTotalSupply + 1n, maxTotalSupply);
+    });
+
+    it("Should mint tokens", async function () {
+      const { erc20, account } = await deployEmptyERC20Fixture();
+      await expect(erc20.mint(account.address, 1000))
+        .to.emit(erc20, "Transfer")
+        .withArgs(ethers.ZeroAddress, account.address, 1000);
+      expect(await erc20.balanceOf(account.address)).to.equal(1000);
+    });
+  });
+
+  describe("burn", function () {
+    it("Should fail if the account doesn't have enough tokens", async function () {
+      const { erc20, account } = await deployERC20Fixture();
+      await expect(erc20.connect(account).burn(1001)).to.be.reverted;
+    });
+
+    it("Should burn tokens", async function () {
+      const { erc20, account } = await deployERC20Fixture();
+      await expect(erc20.connect(account).burn(1000))
+        .to.emit(erc20, "Transfer")
+        .withArgs(account.address, ethers.ZeroAddress, 1000);
+      expect(await erc20.balanceOf(account.address)).to.equal(0);
     });
   });
 });

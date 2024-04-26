@@ -1,5 +1,5 @@
 [*]
-tab_width = 4
+indent_size = 4
 
-[*.js]
-tab_width = 2
+[*.{js, ts}]
+indent_size = 2
