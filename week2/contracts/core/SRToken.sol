@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC4626.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract SRToken is ERC20Permit, ERC4626, RewardManager {
+contract SRToken is ERC4626, RewardManager {
     constructor(
         IERC20 stakingToken_,
         IERC20 rewardToken_,
@@ -17,7 +17,6 @@ contract SRToken is ERC20Permit, ERC4626, RewardManager {
         string memory symbol_
     )
         ERC4626(stakingToken_)
-        ERC20Permit(name_)
         ERC20(name_, symbol_)
         RewardManager(rewardToken_, start, end, rate)
         Ownable(_msgSender())
@@ -43,9 +42,5 @@ contract SRToken is ERC20Permit, ERC4626, RewardManager {
 
     function totalStaked() internal view override returns (uint256) {
         return totalSupply();
-    }
-
-    function decimals() public view override(ERC20, ERC4626) returns (uint8) {
-        return super.decimals();
     }
 }
