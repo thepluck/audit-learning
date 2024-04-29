@@ -1,0 +1,34 @@
+{
+    "accounts": {
+        "owner": {
+            "address": "0xE41D71FD117236209C25a4C4e67A51d3966B1a84",
+            "privateKey": "0x76e27f399dac671c07b832ed52963d367055ec5e61b6b6f8ec0665e743fedf1e"
+        },
+        "user1": {
+            "address": "0x6b083015CA797f91455CD5fbe29F638976938b15",
+            "privateKey": "0x6057a5a962663f00e080fd4ee2c0a0f2819caab317363bf404d689c806007f96"
+        },
+        "user2": {
+            "address": "0x421f65B045d7a386A4C171Ba0Eb91C5bfd9F5991",
+            "privateKey": "0x1c5ec39e7b3e6a93ca692ca2bd6e32d7abe69823963672058ee196a83259b16b"
+        }
+    },
+    "StakingToken": {
+        "name": "Staking",
+        "symbol": "STK",
+        "address": "0x96F71aBE8d1d684c95d6509134db25F813A5D228"
+    },
+    "RewardToken": {
+        "name": "Reward",
+        "symbol": "RWD",
+        "address": "0xAE8351D123777830a30d074D48da29F24b5D353e"
+    },
+    "SRToken": {
+        "start": 5796900,
+        "end": 5797200,
+        "rate": 40,
+        "name": "StakingReward",
+        "symbol": "SR",
+        "address": "0x7fac6C3408540d387EF012dF32a09e2739625Fcd"
+    }
+}
